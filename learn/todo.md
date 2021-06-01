@@ -1,0 +1,1 @@
+- [ ] test half sync / half async
