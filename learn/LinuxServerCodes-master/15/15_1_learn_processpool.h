@@ -126,7 +126,7 @@ processpool<T>::processpool(int listenfd, int process_number)
 		assert(ret == 0);
 
 		m_sub_process[i].m_pid = fork();
-		assert(m_sub_process[i].m_pid >= 0)
+		assert(m_sub_process[i].m_pid >= 0);
 		if (m_sub_process[i].m_pid > 0) {
 			// why?
 			close(m_sub_process[i].m_pipefd[1]);
@@ -277,7 +277,7 @@ void processpool<T>::run_parent() {
 	int ret = -1;
 
 	while (!m_stop) {
-		number = epoll_wait(m_epollfd,, events, MAX_EVENT_NUMBER, -1);
+		number = epoll_wait(m_epollfd, events, MAX_EVENT_NUMBER, -1);
 		if ((number < 0) && (errno != EINTR)) {
 			printf("epoll failure\n");
 			break;
