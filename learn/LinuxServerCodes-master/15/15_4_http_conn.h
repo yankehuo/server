@@ -36,7 +36,7 @@ public:
 
 	// 处理HTTP
 	enum HTTP_CODE {
-		NO_REQUEST, GET_REQUEST, BAD_REQUES, NO_RESOURCE, FORBIDDEN_REQUEST, FILE_REQUEST, INTERNAL_ERROR, CLOSED_CONNECTION
+		NO_REQUEST, GET_REQUEST, BAD_REQUEST, NO_RESOURCE, FORBIDDEN_REQUEST, FILE_REQUEST, INTERNAL_ERROR, CLOSED_CONNECTION
 	};
 
 	// 行的读取状态
@@ -50,7 +50,7 @@ public:
 public:
 	void init(int sockfd, const sockaddr_in &addr);
 	void close_conn(bool real_close = true);
-	void porcess();
+	void process();
 	// 非阻塞操作
 	bool read();
 	bool write();
@@ -75,7 +75,8 @@ private:
 	// why?
 	bool add_response(const char *format, ...);
 	bool add_content(const char *content);
-	bool add_headers(int status, const char *title);
+    bool add_status_line( int status, const char *title );
+	bool add_headers(int content_length);
 	bool add_content_length(int content_length);
 	bool add_linger();
 	bool add_blank_line();
@@ -104,7 +105,7 @@ private:
 	char *m_url;
 	char *m_version;
 	char *m_host;
-	char *m_content_length;
+	int m_content_length;
 	// 是否保持连接
 	bool m_linger;
 

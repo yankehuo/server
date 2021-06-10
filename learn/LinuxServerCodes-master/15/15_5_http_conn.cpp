@@ -29,7 +29,7 @@ void addfd(int epollfd, int fd, bool one_shot) {
 	setnonblocking(fd);
 }
 
-void remove(int epollfd, int fd) {
+void removefd(int epollfd, int fd) {
 	epoll_ctl(epollfd, EPOLL_CTL_DEL, fd, 0);
 	close(fd);
 }
@@ -55,6 +55,10 @@ void http_conn::close_conn(bool real_close) {
 void http_conn::init(int sockfd, const sockaddr_in &addr) {
 	m_sockfd = sockfd;
 	m_address = addr;
+	//
+	int error = 0;
+	socklen_t len = sizeof(error);
+	getsockopt(m_sockfd, SOL_SOCKET, SO_ERROR, &error, &len);
 	// why ?
 	int reuse = 1;
 	setsockopt(m_sockfd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
@@ -73,6 +77,8 @@ void http_conn::init() {
 	m_url = 0;
 	m_version = 0;
 	m_content_length = 0;
+	m_host = 0;
+	m_start_line = 0;
 	m_checked_idx = 0;
 	m_read_idx = 0;
 	m_write_idx = 0;
@@ -266,7 +272,7 @@ http_conn::HTTP_CODE http_conn::do_request() {
 	}
 
 	int fd = open(m_real_file, O_RDONLY);
-	m_file_address = *(char*)mmap(0, m_file_stat.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+	m_file_address = (char*)mmap(0, m_file_stat.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
 	close(fd);
 	return FILE_REQUEST;
 }
@@ -333,3 +339,100 @@ bool http_conn::add_response(const char *format, ...) {
 	va_end(arg_list);
 	return true;
 }
+
+bool http_conn::add_status_line(int status, const char *title) {
+	return add_response("%s %d %s\r\n", "HTTP/1.1", status, title);
+}
+
+//
+bool http_conn::add_headers(int content_len) {
+	add_content_length(content_len);
+	add_linger();
+	add_blank_line();
+}
+
+bool http_conn::add_content_length(int content_len) {
+	return add_response("Content-length: %d\r\n", content_len);
+}
+
+bool http_conn::add_linger() {
+	return add_response("Connection: %s\r\n", (m_linger == true) ? "keep-alive" : "close");
+}
+
+bool http_conn::add_blank_line() {
+	return add_response("%s", "\r\n");
+}
+
+bool http_conn::add_content(const char *content) {
+	return add_response("%s", content);
+}
+
+bool http_conn::process_write(HTTP_CODE ret) {
+	switch (ret) {
+		case INTERNAL_ERROR:
+			add_status_line(500, error_500_title);
+			add_headers(strlen(error_500_form));
+			if (!add_content(error_500_form)) {
+				return false;
+			}
+			break;
+		case BAD_REQUEST:
+			add_status_line(400, error_400_title);
+			add_headers(strlen(error_400_form));
+			if (!add_content(error_400_form)) {
+				return false;
+			}
+			break;
+		case NO_REQUEST:
+			add_status_line(404, error_404_title);
+			add_headers(strlen(error_404_form));
+			if (!add_content(error_404_form)) {
+				return false;
+			}
+			break;
+		case FORBIDDEN_REQUEST:
+			add_status_line(403, error_403_title);
+			add_headers(strlen(error_403_form));
+			if (!add_content(error_403_form)) {
+				return false;
+			}
+			break;
+		case FILE_REQUEST:
+			add_status_line(200, ok_200_title);
+			if (m_file_stat.st_size != 0) {
+				add_headers(m_file_stat.st_size);
+				m_iv[0].iov_base = m_write_buf;
+				m_iv[0].iov_len = m_write_idx;
+				m_iv[1].iov_base = m_file_address;
+				m_iv_count = 2;
+				return true;
+			}
+			else {
+				const char *ok_string = "<html><body></body></html>";
+				add_headers(strlen(ok_string));
+				if (!add_content(ok_string)) {
+					return false;
+				}
+			}
+		default:
+			return false;
+	}
+	m_iv[0].iov_base = m_write_buf;
+	m_iv[0].iov_len = m_write_idx;
+	m_iv_count = 1;
+	return true;
+}
+
+void http_conn::process() {
+	HTTP_CODE read_ret = process_read();
+	if (read_ret == NO_REQUEST) {
+		modfd(m_epollfd, m_sockfd, EPOLLIN);
+		return;
+	}
+	bool write_ret = process_write(read_ret);
+	if (!write_ret) {
+		close_conn();
+	}
+	modfd(m_epollfd, m_sockfd, EPOLLOUT);
+}
+
