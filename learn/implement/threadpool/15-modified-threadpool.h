@@ -66,7 +66,7 @@ public:
 		return m_instance;
 	}
 
-	~processpool() {
+	~threadpool() {
 		// 
 		delete [] m_work_thread;
 	}
@@ -89,7 +89,7 @@ int setnonblocking(int fd) {
 }
 
 // used_fd store fd
-void addfd(int epollfd, std::set<int> &used_fd) {
+void addfd(int epollfd, int fd, std::set<int> &used_fd) {
 	epoll_event event;
 	event.data.fd = fd;
 	event.events = EPOLLIN | EPOLLET;
@@ -98,7 +98,7 @@ void addfd(int epollfd, std::set<int> &used_fd) {
 	setnonblocking(fd);
 }
 
-void removefd(int epollfd, std::set<int> &used_fd) {
+void removefd(int epollfd, int fd,  std::set<int> &used_fd) {
 	epoll_ctl(epollfd, EPOLL_CTL_DEL, fd, NULL);
 	used_fd.erase(fd);
 }
@@ -133,15 +133,15 @@ void addsig(int sig, void(*handler)(int), bool restart = true) {
 
 // unified event source: I/O signal time?
 template <typename T>
-void processpool<T>::setup_sig_pipe() {
-	m_epollfd = epoll_create(5);
+void threadpool<T>::setup_sig_pipe() {
+	int m_epollfd = epoll_create(5);
 	assert(m_epollfd != -1);
 
 	int ret = socketpair(PF_UNIX, SOCK_STREAM, 0, sig_pipefd);
 	assert(ret != -1);
 
 	setnonblocking(sig_pipefd[1]);
-	addfd(m_epollfd, sig_pipefd[0]);
+	addfd(m_epollfd, sig_pipefd[0], used_fd);
 
 	// addsig(SIGCHLD, sig_handler);
 	addsig(SIGTERM, sig_handler);
@@ -150,10 +150,9 @@ void processpool<T>::setup_sig_pipe() {
 }
 // constructor, listenfd must be created before pool
 template <typename T>
-processpool<T>::processpool(int listenfd, int thread_number) 
-	: m_listenfd(listenfd), m_thread_number(thread_number), m_idx(-1)
-{
-	assert((thread_nubmer > 0) && (thread_number <= MAX_THREAD_NUMBER));
+threadpool<T>::threadpool(int listenfd, int thread_number) 
+	: m_listenfd(listenfd), m_thread_number(thread_number) {
+	assert((m_thread_number > 0) && (thread_number <= MAX_THREAD_NUMBER));
 
 	m_work_thread = new thread[m_thread_number];
 	assert(m_work_thread);
@@ -173,8 +172,9 @@ processpool<T>::processpool(int listenfd, int thread_number)
 }
 
 // work thread --> worker
+template <typename T>
 void *threadpool<T>::worker(void *arg) {
-	m_thread *cur_thread = (m_thread*)arg;
+	thread *cur_thread = (thread*)arg;
 	std::set<int> used_fd;
 	int epollfd = epoll_create(5);
 	assert(epollfd != -1);
@@ -184,7 +184,7 @@ void *threadpool<T>::worker(void *arg) {
 
 	// events
 	epoll_event events[MAX_EVENT_NUMBER];
-	T *users = new T[USER_PER_PROCESS];
+	T *users = new T[USER_PER_THREAD];
 	assert(users);
 
 	int ret = -1;
@@ -204,7 +204,7 @@ void *threadpool<T>::worker(void *arg) {
 				int client = 0;
 				// read from pipe
 				ret = recv(sockfd, (char*)&client, sizeof(client), 0);
-				if ((ret <= 0) {
+				if (ret <= 0) {
 					continue;
 				}
 				else {
@@ -245,7 +245,8 @@ void *threadpool<T>::worker(void *arg) {
 
 
 template <typename T>
-void processpool<T>::run_parent() {
+void threadpool<T>::run() {
+	std::set<int> used_fd;
 	setup_sig_pipe();
 	// parent listen m_listenfd
 	addfd(m_epollfd, m_listenfd);
