@@ -46,6 +46,7 @@ private:
 	// total thread number
 	int m_thread_number;
 	// point to listening socket, main and work share the same
+	int m_epollfd;
 	int m_listenfd;
 	thread *m_work_thread;
 	static threadpool *m_instance;
@@ -134,13 +135,14 @@ void addsig(int sig, void(*handler)(int), bool restart = true) {
 // unified event source: I/O signal time?
 template <typename T>
 void threadpool<T>::setup_sig_pipe() {
-	int m_epollfd = epoll_create(5);
+	m_epollfd = epoll_create(5);
 	assert(m_epollfd != -1);
 
 	int ret = socketpair(PF_UNIX, SOCK_STREAM, 0, sig_pipefd);
 	assert(ret != -1);
 
 	setnonblocking(sig_pipefd[1]);
+	std::set<int> used_fd;
 	addfd(m_epollfd, sig_pipefd[0], used_fd);
 
 	// addsig(SIGCHLD, sig_handler);
@@ -249,7 +251,7 @@ void threadpool<T>::run() {
 	std::set<int> used_fd;
 	setup_sig_pipe();
 	// parent listen m_listenfd
-	addfd(m_epollfd, m_listenfd);
+	addfd(m_epollfd, m_listenfd, used_fd);
 	epoll_event events[MAX_EVENT_NUMBER];
 
 	// work thread start
@@ -257,7 +259,7 @@ void threadpool<T>::run() {
 	// int new_conn = 1;
 	bool stop = false;
 	int number = 0;
-	// int ret = -1;
+	int ret = -1;
 
 	while (!stop) {
 		number = epoll_wait(m_epollfd, events, MAX_EVENT_NUMBER, -1);
