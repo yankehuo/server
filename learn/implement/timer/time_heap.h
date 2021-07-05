@@ -150,7 +150,7 @@ private:
 		}
 		array[hole] = tmp;
 	}
-	void  resize() throw (std::exception) {
+	void resize() throw (std::exception) {
 		heap_timer **tmp = new heap_timer *[2 * capacity];
 		for (int i = 0; i < 2 * capacity; ++i) {
 			tmp[i] = NULL;
