@@ -80,19 +80,19 @@ T BlockDeque<T>::back() {
 }
 
 template <typename T>
-size_t BlockDeque::size() {
+size_t BlockDeque<T>::size() {
 	std::lock_guard<std::mutex> locker(mtx_);
 	return deq_.size();
 }
 
 template <typename T>
-size_t BlockDeque::capacity() {
+size_t BlockDeque<T>::capacity() {
 	std::lock_guard<std::mutex> locker(mtx_);
 	return capacity_;
 }
 
 template <typename T>
-void BlockDeque::push_back(const T &item) {
+void BlockDeque<T>::push_back(const T &item) {
 	std::unique_lock<std::mutex> locker(mtx_);
 	// prevent supurious wake-up calls
 	while (deq_.size() >= capacity_) {
@@ -107,6 +107,7 @@ void BlockDeque<T>::push_front(const T &item) {
 	while (deq_.size() >= capacity_) {
 		condProducer_.wait(locker);
 	}
+	deq_.push_front(item);
 	condConsumer_.notify_one();
 }
 
