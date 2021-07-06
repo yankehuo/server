@@ -39,7 +39,12 @@ private:
 public:
 	void init(int level, const char *path = "./log", const char *suffix = ".log", int maxQueueCapacity = 1024);
 
-	static Log *Instance();
+	// singleton lazy mode
+	static Log *Instance() {
+		static Log instance;
+		return &instance;
+	};
+
 	static void FlushLogThread();
 
 	void write(int level, const char *format, ...);
@@ -54,16 +59,11 @@ private:
 	// singleton
 	Log();
 	void AppendLogLevelTitle_(int level);
-	// 
-	// virtual ~Log();
+	// ~Log();
 	~Log();
 	void AsynWrite_();
 };
-// singleton
-Log *Log::Instance() {
-	static Log inst;
-	return &inst;
-}
+
 
  #define LOG_BASE(level, format, ...) \
 	do {\

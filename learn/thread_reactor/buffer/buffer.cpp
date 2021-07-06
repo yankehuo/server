@@ -16,6 +16,7 @@ const char *Buffer::Peek() const {
 	return BeginPtr_() + readPos_;
 }
 
+// relocate the readPos_
 void Buffer::Retrieve(size_t len) {
 	assert(len <= ReadableBytes());
 	readPos_ += len;
@@ -55,6 +56,7 @@ void Buffer::Append(const void *data, size_t len) {
 	assert(data);
 	Append(static_cast<const char *>(data), len);
 }
+// adjust the space of buffer_, and relocate mainly the writePos_
 void Buffer::Append(const char *str, size_t len) {
 	assert(str);
 	EnsureWritable(len);

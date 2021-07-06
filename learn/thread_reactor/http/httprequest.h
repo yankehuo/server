@@ -15,17 +15,7 @@
 
 // sqlpool
 
-class HttpReuqest {
-private:
-	PARSE_STATE state_;
-	std::string method_, path_, version_, body_;
-	// 
-	std::unordered_map<std::string, std::string> header_;
-	//
-	std::unordered_map<std::string, std::string> post_;
-
-	static const std::unordered_set<std::string> DEFAULT_HTML;
-	static const std::unordered_map<std::string, int> DEFAULT_HTML_TAG;
+class HttpRequest {
 public:
 	enum PARSE_STATE {
 		REQUEST_LINE = 0,
@@ -38,17 +28,17 @@ public:
 		NO_REQUEST = 0,
 		GET_REQUEST,
 		BAD_REQUEST,
-		NO_REQUEST,
+		NO_RESOURCE,
 		FORBIDDENT_REQUEST,
 		FILE_REQUEST,
 		INTERNAL_ERROR,
 		CLOSED_CONNECTION,
 	};
 
-	HttpReuqest() {
+	HttpRequest() {
 		Init();
 	}
-	~HttpReuqest() = default;
+	~HttpRequest() = default;
 
 	void Init();
 	bool parse(Buffer &buff);
@@ -58,24 +48,34 @@ public:
 	std::string method() const;
 	std::string version() const;
 	//
-	std::string GetPost(const std::string &key) const;
-	std::string GetPost(const char *key) const;
+//	std::string GetPost(const std::string &key) const;
+//	std::string GetPost(const char *key) const;
 
 	bool IsKeepAlive() const;
 private:
 	bool ParseRequestLine_(const std::string &line);
 	void ParseHeader_(const std::string &line);
 	void ParseBody_(const std::string &line);
-
 	void ParsePath_();
-	// ?
-	void ParsePost_();
-	void ParseFromUrlencoded_();
+private:
+	PARSE_STATE state_;
+	std::string method_, path_, version_, body_;
+	// 
+	std::unordered_map<std::string, std::string> header_;
+	//
+//	std::unordered_map<std::string, std::string> post_;
+
+	static const std::unordered_set<std::string> DEFAULT_HTML;
+//	static const std::unordered_map<std::string, int> DEFAULT_HTML_TAG;
 
 	// ?
-	static bool UserVerify(const std::string &name, const std::string &pwd, bool isLogin);
+//	void ParsePost_();
+//	void ParseFromUrlencoded_();
 
-	static int ConverHex(char ch);
+	// ?
+//	static bool UserVerify(const std::string &name, const std::string &pwd, bool isLogin);
+	//
+//	static int ConverHex(char ch);
 };
 
 #endif

@@ -1,28 +1,29 @@
 #include "httprequest.h"
 
-const std::unordered_set<std::string> HttpReuqest::DEFAULT_HTML {
+const std::unordered_set<std::string> HttpRequest::DEFAULT_HTML {
 	"/index", "picture",
 };
 // 
-const std::unordered_map<std::string, int> HttpReuqest::DEFAULT_HTML_TAG {
-};
+// const std::unordered_map<std::string, int> HttpRequest::DEFAULT_HTML_TAG {
+// };
 
-void HttpReuqest::Init() {
+void HttpRequest::Init() {
 	method_ = path_ = version_ = body_ = "";
 	state_ = REQUEST_LINE;
 	header_.clear();
 	// 
-	post_.clear();
+	// post_.clear();
 }
 
-bool HttpReuqest::IsKeepAlive() const {
+bool HttpRequest::IsKeepAlive() const {
 	if (header_.count("Connection") == 1) {
-		return head_.find("Connection")->second == "keep_alive" && version_ == "1.1";
+		return header_.find("Connection")->second == "keep_alive" && version_ == "1.1";
 	}
 	return false;
 }
 
-bool HttpReuqest::parse(Buffer &buff) {
+bool HttpRequest::parse(Buffer &buff) {
+	// size : 3 : 1 2 \0
 	const char CRLF[] = "\r\n";
 	if (buff.ReadableBytes() <= 0) {
 		return false;
@@ -58,7 +59,7 @@ bool HttpReuqest::parse(Buffer &buff) {
 	return true;
 }
 
-void HttpReuqest::ParsePath_() {
+void HttpRequest::ParsePath_() {
 	if (path_ == "/") {
 		path_ = "/index.html";
 	}
@@ -72,7 +73,7 @@ void HttpReuqest::ParsePath_() {
 	}
 }
 
-bool HttpReuqest::ParseRequestLine_(const string &line) {
+bool HttpRequest::ParseRequestLine_(const std::string &line) {
 	std::regex pattern("^([^ ]*) ([^ ]*) HTTP/([^ ]*)$");
 	std::smatch subMatch;
 	if (std::regex_match(line, subMatch, pattern)) {
@@ -86,9 +87,9 @@ bool HttpReuqest::ParseRequestLine_(const string &line) {
 	return false;
 }
 
-void HttpReuqest::ParseHeader_(const string &line) {
+void HttpRequest::ParseHeader_(const std::string &line) {
 	std::regex pattern("^([^:]*): ?(.*)$");
-	std::smatc subMatch;
+	std::smatch subMatch;
 	if (std::regex_match(line, subMatch, pattern)) {
 		header_[subMatch[1]] = subMatch[2];
 	}
@@ -96,11 +97,27 @@ void HttpReuqest::ParseHeader_(const string &line) {
 		state_ = BODY;
 	}
 }
-void HttpReuqest::ParseBody_(const string &line) {
+void HttpRequest::ParseBody_(const std::string &line) {
 	body_ = line;
 	// 
-	ParsePost_();
+	// ParsePost_();
+
 	state_ = FINISH;
 	LOG_DEBUG("Body:%s, len:%d", line.c_str(), line.size());
-
 }
+
+
+std::string HttpRequest::path() const {
+	return path_;
+}
+std::string &HttpRequest::path() {
+	return path_;
+}
+std::string HttpRequest::method() const {
+	return method_;
+}
+std::string HttpRequest::version() const {
+	return version_;
+}
+
+//
