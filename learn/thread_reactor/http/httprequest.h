@@ -19,7 +19,9 @@ class HttpReuqest {
 private:
 	PARSE_STATE state_;
 	std::string method_, path_, version_, body_;
+	// 
 	std::unordered_map<std::string, std::string> header_;
+	//
 	std::unordered_map<std::string, std::string> post_;
 
 	static const std::unordered_set<std::string> DEFAULT_HTML;
@@ -55,6 +57,7 @@ public:
 	std::string &path();
 	std::string method() const;
 	std::string version() const;
+	//
 	std::string GetPost(const std::string &key) const;
 	std::string GetPost(const char *key) const;
 
