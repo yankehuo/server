@@ -208,7 +208,7 @@ bool WebServer::InitSocket_() {
 	addr.sin_family = AF_INET;
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	addr.sin_port = htons(port_);
-	// close
+	// close:--> elegant
 	struct linger optLinger = {0};
 	if (openLinger_) {
 		// close until data finished or timeouted
