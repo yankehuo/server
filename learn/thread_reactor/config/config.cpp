@@ -8,7 +8,7 @@ Config::Config() {
 	// elegant
 	OPTLINGER = false;
 	// threadpool number
-	THREADNUM = 6;
+	THREADNUM = 8;
 	// open log ?
 	OPENLOG = true;
 	LOGLEVEL = 1;

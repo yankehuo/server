@@ -14,6 +14,7 @@
 class Epoller {
 private:
 	int epollFd_;
+	// store ready 
 	std::vector<struct epoll_event> events_;
 public:
 	explicit Epoller(int maxEvent = 1024);

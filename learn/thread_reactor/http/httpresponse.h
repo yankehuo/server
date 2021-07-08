@@ -12,7 +12,7 @@
 #include <sys/mman.h>
 
 #include "../buffer/buffer.h"
-#include "../log/log.h"
+#include "../logbq/log.h"
 
 class HttpResponse {
 private:

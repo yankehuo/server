@@ -1,7 +1,7 @@
 #include "httprequest.h"
 
 const std::unordered_set<std::string> HttpRequest::DEFAULT_HTML {
-	"/index", "picture",
+	"/index", "/home",
 };
 // 
 // const std::unordered_map<std::string, int> HttpRequest::DEFAULT_HTML_TAG {

@@ -9,7 +9,7 @@
 #include <functional>
 #include <cassert>
 #include <chrono>
-#include "../log/log.h"
+#include "../logbq/log.h"
 
 // call back function
 typedef std::function<void()> TimeoutCallBack;

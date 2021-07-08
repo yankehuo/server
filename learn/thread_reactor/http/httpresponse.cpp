@@ -22,14 +22,14 @@ const std::unordered_map<std::string, std::string> HttpResponse::SUFFIX_TYPE = {
     { ".js",    "text/javascript "},
 };
 
-const std::unordered_map<int, std::string> HttpResponse::CODE_PATH = {
+const std::unordered_map<int, std::string> HttpResponse::CODE_STATUS = {
 	{ 200, "OK" },
 	{ 400, "Bad Request" },
 	{ 400, "Forbidden" },
 	{ 404, "Not Found" },
 };
 
-const std::unordered_map<int, std::string> HttpResponse::CODE_STATUS = {
+const std::unordered_map<int, std::string> HttpResponse::CODE_PATH = {
 	{ 400, "/400.html" },
 	{ 403, "/403.html" },
 	{ 404, "/404.html" },
@@ -104,7 +104,7 @@ void HttpResponse::AddStateLine_(Buffer &buff) {
 	}
 	else {
 		code_ = 400;
-		status = CODE_STATUS.find(code_)->second;
+		status = CODE_STATUS.find(400)->second;
 	}
 	buff.Append("HTTP/1.1 " + std::to_string(code_) + " " + status + "\r\n");
 }

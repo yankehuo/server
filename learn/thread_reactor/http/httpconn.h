@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <errno.h>
 
-#include "../log/log.h"
+#include "../logbq/log.h"
 #include "httprequest.h"
 #include "httpresponse.h"
 

@@ -10,10 +10,13 @@ WebServer::WebServer(int port, int trigMode, int timeoutMS, bool optLinger, int 
 		HttpConn::userCount = 0;
 		HttpConn::srcDir = srcDir_;
 
-		InitEventMode_(trigMode);
+		// sequence
 		if (!InitSocket_()) {
 			isClose_ = true;
 		}
+
+		// sequence
+		InitEventMode_(trigMode);
 		if (openLog) {
 			Log::Instance()->init(logLevel, "./log", ".log", logQueSize);
 			if (isClose_) {
@@ -28,6 +31,7 @@ WebServer::WebServer(int port, int trigMode, int timeoutMS, bool optLinger, int 
 				LOG_INFO("ThreadPool num:%d", threadNum);
 			}
 		}
+
 }
 
 WebServer::~WebServer() {
@@ -220,7 +224,6 @@ bool WebServer::InitSocket_() {
 		LOG_ERROR("Create socket error!", port_);
 		return false;
 	}
-	int optval = 1;
 
 	ret = setsockopt(listenFd_, SOL_SOCKET, SO_LINGER, &optLinger, sizeof(optLinger));
 	if (ret < 0) {
@@ -229,6 +232,7 @@ bool WebServer::InitSocket_() {
 		return false;
 	}
 
+	int optval = 1;
 	// reuse the port
 	ret = setsockopt(listenFd_, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval, sizeof(int));
 	if (ret == -1) {
@@ -244,7 +248,7 @@ bool WebServer::InitSocket_() {
 		return false;
 	}
 
-	ret = listen(listenFd_, 6);
+	ret = listen(listenFd_, 8);
 	if (ret < 0) {
 		LOG_ERROR("Listen port:%d error!", port_);
 		close(listenFd_);
