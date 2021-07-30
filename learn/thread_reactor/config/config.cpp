@@ -4,7 +4,7 @@ Config::Config() {
 	PORT = 6666;
 	// ET
 	TRIGMODE = 3;
-	TIMEOUTMS = 60000;
+	TIMEOUTMS = 5000;
 	// elegant
 	OPTLINGER = false;
 	// threadpool number
