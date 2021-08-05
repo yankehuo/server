@@ -6,7 +6,8 @@
 	* shared_ptr管理资源
 	* RAII：资源获取即初始化
 * HTTP解析
-	* 状态机设置图形！！！
+	* 状态机设置
+	![httpparse](https://user-images.githubusercontent.com/33850772/128378264-bd17ee04-56fb-4dbd-bce2-0b52d70b6cae.png)
 	* request 解析HTTP请求
 	* response 将响应报文写入buffer
 	* conn 处理连接
@@ -40,24 +41,32 @@
 
 * LT + LT
 	* reactor
-	![[Pasted image 20210805224126.png]]
+	
+	![Pasted image 20210805224126](https://user-images.githubusercontent.com/33850772/128377431-1653cb53-bdd0-457a-b6f1-37a8f4adb018.png)
 	* proactor
-	![[Pasted image 20210805224735.png]]
+	
+	![Pasted image 20210805224735](https://user-images.githubusercontent.com/33850772/128377512-2212c0f1-3f76-4e05-9fdb-707da8831624.png)
 * LT + ET
 	* reactor
-	![[Pasted image 20210805225143.png]]
+	
+	![Pasted image 20210805225143](https://user-images.githubusercontent.com/33850772/128377611-6701a319-0fde-4fd9-8f13-ddb25229d7e1.png)
 	* proactor
-	![[Pasted image 20210805224918.png]]
+	
+	![Pasted image 20210805224918](https://user-images.githubusercontent.com/33850772/128377645-0e99abfe-d20e-4df2-bc49-5dd483176a0d.png)
 * ET + LT
 	* reactor
-	![[Pasted image 20210805225256.png]]
+	
+	![Pasted image 20210805225256](https://user-images.githubusercontent.com/33850772/128377684-8171c1f6-45d5-44c5-9683-5217e8dc797b.png)
 	* proactor
-	![[Pasted image 20210805225426.png]]
+	
+	![Pasted image 20210805225426](https://user-images.githubusercontent.com/33850772/128377744-1760c546-2631-415a-ac5e-c2dc8562b947.png)
 * ET + ET
 	* reactor
-	![[Pasted image 20210805230716.png]]
+	
+	![Pasted image 20210805230716](https://user-images.githubusercontent.com/33850772/128377780-ccc2c5bb-0bca-44fe-b9fd-0191073da898.png)
 	* proactor
-	![[Pasted image 20210805225631.png]]
+	
+	![Pasted image 20210805225631](https://user-images.githubusercontent.com/33850772/128377810-789c87b7-6897-4576-a530-6aedfd87ca9b.png)
 
 
 * 参考资料：
