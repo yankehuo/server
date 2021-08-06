@@ -71,7 +71,7 @@
 
 
 * 参考资料：
-	* 游双高性能服务器编程
-	* qinguoyi https://github.com/qinguoyi/TinyWebServer
-	* markparticle https://github.com/markparticle/WebServer
+	* 游双 <<Linux高性能服务器编程>>
+	* [qinguoyi](https://github.com/qinguoyi/TinyWebServer)
+	* [markparticle](https://github.com/markparticle/WebServer)
 
