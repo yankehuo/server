@@ -64,10 +64,10 @@
 * ET + ET
 	* reactor
 	
-	![Pasted image 20210805230716](https://user-images.githubusercontent.com/33850772/128377780-ccc2c5bb-0bca-44fe-b9fd-0191073da898.png)
+	![Pasted image 20210806220126](https://user-images.githubusercontent.com/33850772/128522093-654faf52-17fa-47c8-8713-b6e082a2cad1.png)
 	* proactor
 	
-	![Pasted image 20210806102757](https://user-images.githubusercontent.com/33850772/128448520-13152428-660a-4793-a846-9b0188703000.png)
+	![Pasted image 20210806220059](https://user-images.githubusercontent.com/33850772/128522042-12f78481-0860-49cd-a842-c20a45c299f0.png)
 
 
 * 参考资料：
