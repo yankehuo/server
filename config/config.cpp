@@ -9,7 +9,7 @@ Config::Config() {
 	OPENLINGER = false;
 	// threadpool number
 	THREADNUM = 8;
-	// open log ?
+	// open log 
 	OPENLOG = true;
 	LOGLEVEL = 1;
 	// blockqueue size about log

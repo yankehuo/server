@@ -1,0 +1,74 @@
+2021-08-06 10:20:58.497472 [info] : =============== Server init ======================
+2021-08-06 10:20:58.497497 [info] : Port:6666, OpenLinger:false
+2021-08-06 10:20:58.497503 [info] : Listen Mode:LT, OpenConn Mode:LT
+2021-08-06 10:20:58.497546 [info] : LogSys level:1
+2021-08-06 10:20:58.497654 [info] : srcDir:/test/devo/modified/version2/server/resource/
+2021-08-06 10:20:58.497678 [info] : ThreadPool num:8
+2021-08-06 11:14:09.043740 [info] : =============== Server init ======================
+2021-08-06 11:14:09.043761 [info] : Port:6666, OpenLinger:false
+2021-08-06 11:14:09.043766 [info] : Listen Mode:ET, OpenConn Mode:ET
+2021-08-06 11:14:09.043792 [info] : LogSys level:1
+2021-08-06 11:14:09.043797 [info] : srcDir:/test/devo/modified/version2/server/resource/
+2021-08-06 11:14:09.043829 [info] : ThreadPool num:8
+2021-08-06 11:14:09.043902 [info] : ================= Server start ==============
+2021-08-06 11:14:11.327066 [info] : Client[6](127.0.0.1:24799) in, userCount:1
+2021-08-06 11:14:11.327162 [info] : Client[6] in!
+2021-08-06 11:14:11.327382 [info] : Client[7](127.0.0.1:25311) in, userCount:2
+2021-08-06 11:14:11.327427 [info] : Client[7] in!
+2021-08-06 11:14:11.330699 [info] : Client [6] quit!
+2021-08-06 11:14:11.330773 [info] : Client[6](127.0.0.1:24799) in, userCount:1
+2021-08-06 11:14:11.341070 [info] : Client[6](127.0.0.1:25823) in, userCount:2
+2021-08-06 11:14:11.341111 [info] : Client[6] in!
+2021-08-06 11:14:11.341951 [info] : Client [7] quit!
+2021-08-06 11:14:11.342031 [info] : Client[7](127.0.0.1:25311) in, userCount:1
+2021-08-06 11:14:11.345275 [info] : Client [6] quit!
+2021-08-06 11:14:11.345324 [info] : Client[6](127.0.0.1:25823) in, userCount:0
+2021-08-06 11:14:11.350794 [info] : Client[6](127.0.0.1:26335) in, userCount:1
+2021-08-06 11:14:11.350863 [info] : Client[6] in!
+2021-08-06 11:14:11.353427 [info] : Client [6] quit!
+2021-08-06 11:14:11.353511 [info] : Client[6](127.0.0.1:26335) in, userCount:0
+2021-08-06 11:14:15.542351 [info] : Client[6](127.0.0.1:28895) in, userCount:1
+2021-08-06 11:14:15.542412 [info] : Client[6] in!
+2021-08-06 11:14:15.544777 [info] : Client [6] quit!
+2021-08-06 11:14:15.544837 [info] : Client[6](127.0.0.1:28895) in, userCount:0
+2021-08-06 11:14:16.342041 [info] : Client [7] quit!
+2021-08-06 11:14:20.548316 [info] : Client [6] quit!
+2021-08-06 20:54:29.999103 [info] : Client[6](127.0.0.1:61151) in, userCount:1
+2021-08-06 20:54:29.999399 [info] : Client[6] in!
+2021-08-06 20:54:29.999423 [info] : Client[7](127.0.0.1:61663) in, userCount:2
+2021-08-06 20:54:29.999433 [info] : Client[7] in!
+2021-08-06 20:54:30.001968 [info] : Client [6] quit!
+2021-08-06 20:54:30.002044 [info] : Client[6](127.0.0.1:61151) in, userCount:1
+2021-08-06 20:54:30.021704 [info] : Client [7] quit!
+2021-08-06 20:54:30.021845 [info] : Client[7](127.0.0.1:61663) in, userCount:0
+2021-08-06 20:54:30.024945 [info] : Client[6](127.0.0.1:62175) in, userCount:1
+2021-08-06 20:54:30.024989 [info] : Client[6] in!
+2021-08-06 20:54:30.028899 [info] : Client [6] quit!
+2021-08-06 20:54:30.029002 [info] : Client[6](127.0.0.1:62175) in, userCount:0
+2021-08-06 20:54:31.073844 [info] : Client[6](127.0.0.1:62687) in, userCount:1
+2021-08-06 20:54:31.074023 [info] : Client[6] in!
+2021-08-06 20:54:31.075901 [info] : Client [6] quit!
+2021-08-06 20:54:31.075947 [info] : Client[6](127.0.0.1:62687) in, userCount:0
+2021-08-06 20:54:35.026030 [info] : Client [7] quit!
+2021-08-06 20:54:36.076711 [info] : Client [6] quit!
+2021-08-06 20:54:39.098677 [info] : Client[6](127.0.0.1:63199) in, userCount:1
+2021-08-06 20:54:39.098744 [info] : Client[6] in!
+2021-08-06 20:54:39.098908 [info] : Client[7](127.0.0.1:63711) in, userCount:2
+2021-08-06 20:54:39.098934 [info] : Client[7] in!
+2021-08-06 20:54:39.102184 [info] : Client [6] quit!
+2021-08-06 20:54:39.102233 [info] : Client[6](127.0.0.1:63199) in, userCount:1
+2021-08-06 20:54:39.114296 [info] : Client [7] quit!
+2021-08-06 20:54:39.114354 [info] : Client[7](127.0.0.1:63711) in, userCount:0
+2021-08-06 20:54:39.115480 [info] : Client[6](127.0.0.1:64223) in, userCount:1
+2021-08-06 20:54:39.115515 [info] : Client[6] in!
+2021-08-06 20:54:39.118198 [info] : Client [6] quit!
+2021-08-06 20:54:39.118253 [info] : Client[6](127.0.0.1:64223) in, userCount:0
+2021-08-06 20:54:41.430506 [info] : Client[6](127.0.0.1:64735) in, userCount:1
+2021-08-06 20:54:41.430551 [info] : Client[6] in!
+2021-08-06 20:54:41.431650 [info] : Client[7](127.0.0.1:65247) in, userCount:2
+2021-08-06 20:54:41.431680 [info] : Client[7] in!
+2021-08-06 20:54:41.432636 [info] : Client [6] quit!
+2021-08-06 20:54:41.432706 [info] : Client[6](127.0.0.1:64735) in, userCount:1
+2021-08-06 20:54:41.444893 [info] : Client [7] quit!
+2021-08-06 20:54:41.444979 [info] : Client[7](127.0.0.1:65247) in, userCount:0
+2021-08-06 20:54:46.437161 [info] : Client [6] quit!

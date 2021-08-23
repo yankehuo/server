@@ -159,8 +159,11 @@ void WebServer::DealRead_(HttpConn *client) {
 		int ret = -1;
 		int readerrno = 0;
 		ret = client->Read(&readerrno);
-		//Read_(client);
-		threadpool_->AddTask(std::bind(&WebServer::ProRead_, this, client, ret, readerrno));
+		if (ret <= 0 && readerrno != EAGAIN) {
+			CloseConn_(client);
+			return;
+		}	
+		threadpool_->AddTask(std::bind(&WebServer::OnProcess_, this, client));
 	}
 }
 void WebServer::DealWrite_(HttpConn *client) {
@@ -177,11 +180,21 @@ void WebServer::DealWrite_(HttpConn *client) {
 		int ret = -1;
 		int writeerrno = 0;
 		ret = client->Write(&writeerrno);
-		
-		threadpool_->AddTask(std::bind(&WebServer::ProWrite_, this, client, ret, writeerrno));
+		if (client->ToWriteBytes() == 0) {
+			if (client->IsKeepAlive()) {
+				threadpool_->AddTask(std::bind(&WebServer::OnProcess_, this, client));
+				return;
+			}
+		}
+		else if (ret < 0) {
+			if (writeerrno == EAGAIN) {
+				// continue trans
+				epoller_->ModFd(client->GetFd(), connevent_ | EPOLLOUT);
+				return;
+			}
+		}
+		CloseConn_(client);
 	}
-	//
-	//threadpool_->AddTask(std::bind(&WebServer::OnWrite_, this, client));
 }
 
 void WebServer::ExtentTime_(HttpConn *client) {
@@ -201,36 +214,6 @@ void WebServer::OnRead_(HttpConn *client) {
 		return;
 	}
 	OnProcess_(client);
-}
-
-// proactor_read
-void WebServer::ProRead_(HttpConn *client, int ret, int readerrno) {
-	// worker
-	if (ret <= 0 && readerrno != EAGAIN) {
-		CloseConn_(client);
-		return;
-	}
-	
-	OnProcess_(client);
-}
-// proactor_write
-void WebServer::ProWrite_(HttpConn *client, int ret, int writeerrno) {
-	// worker
-	if (client->ToWriteBytes() == 0) {
-		if (client->IsKeepAlive()) {
-			OnProcess_(client);
-			return;
-		}
-	}
-	else if (ret < 0) {
-		if (writeerrno == EAGAIN) {
-			// continue trans
-			epoller_->ModFd(client->GetFd(), connevent_ | EPOLLOUT);
-			return;
-		}
-	}
-
-	CloseConn_(client);
 }
 
 void WebServer::OnWrite_(HttpConn *client) {

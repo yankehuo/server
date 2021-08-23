@@ -1,6 +1,5 @@
 #include <unistd.h>
 #include "server/webserver.h"
-#include "threadpool/threadpool.h"
 #include "config/config.h"
 
 int main(int argc, char **argv) {

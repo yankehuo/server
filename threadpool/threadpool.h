@@ -24,13 +24,12 @@ public:
 			std::thread([pool = pool_] {
 					while (true) {
 						std::unique_lock<std::mutex> locker(pool->mtx);
-						while (pool->tasks.empty()) {
-							pool->cond.wait(locker);
-
-						}
 						if (pool->isclosed) {
 							locker.unlock();
 							break;
+						}
+						while (pool->tasks.empty()) {
+							pool->cond.wait(locker);
 						}
 						auto task = std::move(pool->tasks.front());
 						pool->tasks.pop();
@@ -47,11 +46,13 @@ public:
 	ThreadPool &operator=(const ThreadPool &) = delete;
 
 	~ThreadPool() {
-		if (static_cast<bool>(pool_)) {
-			std::lock_guard<std::mutex> locker(pool_->mtx);
-			pool_->isclosed = true;
+		if (static_cast<bool>(pool_)) { 
+			{
+				std::lock_guard<std::mutex> locker(pool_->mtx);
+				pool_->isclosed = true;
+			}
+			pool_->cond.notify_all();
 		}
-		pool_->cond.notify_all();
 	}
 
 	// add fucntion object

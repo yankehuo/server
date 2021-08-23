@@ -57,10 +57,6 @@ private:
 	void OnRead_(HttpConn *client);
 	void OnWrite_(HttpConn *client);
 	void OnProcess_(HttpConn *client);
-	// proactor
-	void ProRead_(HttpConn *client, int ret, int readerrno);
-	void ProWrite_(HttpConn *client, int ret, int writeerrno);
-
 
 	static int SetFdNonblock(int fd);
 };
